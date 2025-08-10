@@ -7,7 +7,7 @@ import SignoutButton from './SignoutButton'
 
 const Navbar = () => {
   return (
-    <nav className="border-b">
+    <nav className="border-b p-4 shadow-sm ">
         <div className="container flex flex-col flex-wrap px-2 sm:flex-row sm:justify-between sm:items-center">
             <Logo />
             <NavSearch />
