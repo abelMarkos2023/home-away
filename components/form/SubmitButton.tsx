@@ -10,18 +10,19 @@ import React from 'react'
  * It shows a loading spinner when the form is being submitted.
  */
 
+type buttonSizes = 'sm' | 'default' | 'lg';
 type SubmitButtonProps = {
   // Define any props you need for the SubmitButton component
   text:string;
   classNames?: string;
+  size?: buttonSizes;
 };
 
-const SubmitButton = (props: SubmitButtonProps) => {
+const SubmitButton = ({ text, classNames,size = 'default' } : SubmitButtonProps) => {
 
-    const { text, classNames } = props;
     const {pending} = useFormStatus()
   return (
-    <Button type='submit' disabled={pending} className={`capitalize ${classNames} cursor-pointer`}>
+    <Button type='submit' size = {size} disabled={pending} className={`capitalize ${classNames} cursor-pointer`}>
         {
         pending ? (<>
         <ReloadIcon className="mr-2 w-4 h-4 animate-spin" />
