@@ -2,24 +2,27 @@ import * as zod from 'zod';
 import {ZodSchema} from 'zod';
 
 
-export const profileSchema = zod.object({
-    firstName: zod.string().min(3, 'First name must be greater than 3 characters'),
-    lastName: zod.string().min(3, 'Last name must be greater than 3 characters'),
-    username: zod.string().min(3, 'Username must be greater than 3 characters'),
-})
 
-export const validateWithZodSchema = <T>(data: T, schema: ZodSchema<T>) => {
+export const validateWithZodSchema = <T>(data: unknown, schema: ZodSchema<T>) => {
     const result = schema.safeParse(data);
 
     if (!result.success) {
         const errors = result.error.issues.map((err) => err.message).join(", ");
         throw new Error(`Validation failed: ${errors}`);
+       // return null;
     }
     return result.data;
 }
 export const imageSchema = zod.object({
   image: validateFile(),
 });
+
+export const profileSchema = zod.object({
+    firstName: zod.string().min(3, 'First name must be greater than 3 characters'),
+    lastName: zod.string().min(3, 'Last name must be greater than 3 characters'),
+    username: zod.string().min(3, 'Username must be greater than 3 characters'),
+})
+
 
 function validateFile() {
   const maxUploadSize = 1024 * 1024;
@@ -54,9 +57,7 @@ export const propertySchema = zod.object({
     .max(100, {
       message: 'tagline must be less than 100 characters.',
     }),
-  price: zod.coerce.number().int().min(0, {
-    message: 'price must be a positive number.',
-  }),
+ 
   category: zod.string(),
   description: zod.string().refine(
     (description) => {
@@ -70,6 +71,9 @@ export const propertySchema = zod.object({
   country: zod.string(),
   guests: zod.coerce.number().int().min(0, {
     message: 'guest amount must be a positive number.',
+  }),
+   price: zod.coerce.number().int().min(0, {
+    message: 'price must be a positive number.',
   }),
   bedrooms: zod.coerce.number().int().min(0, {
     message: 'bedrooms amount must be a positive number.',

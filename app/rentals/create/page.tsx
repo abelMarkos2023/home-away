@@ -25,14 +25,14 @@ const page = () => {
             <FormInput
               type="text"
               defaultValue="Capin In Latvia"
-              name="name "
+              name="name"
               label="Name Limit(20) Characters"
             />
             <FormInput
               type="text"
               defaultValue="Capin In Latvia"
-              name="tagline Tagline Limit(20) Characters"
-              label="Property name"
+              name="tagline"
+              label="Tagline Limit(20) Characters"
             />
             {/* Price */}
             <PriceInput />
@@ -46,13 +46,15 @@ const page = () => {
             <ImageInput />
           </div>
             <h2 className="text-xl  font-semibold capitalize my-6">Accommodation Details</h2>
-            <CounterInput text="rooms"/>
-            <CounterInput text="Beds"/>
+            <CounterInput text="bedrooms"/>
+            <CounterInput text="beds"/>
             <CounterInput text="guests"/>
             <CounterInput text="baths"/>
-          <SubmitButton text="Create Property" />
+         
           <h3 className="text-xl font-bold capitalize my-4">Amenities</h3>
           <AmenitiesInput />
+
+           <SubmitButton text="Create Property" />
         </FormContainer>
       </div>
     </section>

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { imageSchema, profileSchema,  propertySchema,  validateWithZodSchema } from "./schemas";
 import { revalidatePath } from "next/cache";
 import { ZodError } from "zod";
+import z from 'zod'
 import { uploadImage } from "./supabase";
 
 export async function getCurrentUser() {
@@ -152,7 +153,7 @@ export const updateProfileImageAction = async (prevState: any,formData: FormData
       throw new Error("No image file provided");
     }
 
-    const validatedFile = validateWithZodSchema({ image: file }, imageSchema);
+    const validatedFile : z.infer<typeof imageSchema> = validateWithZodSchema({ image: file }, imageSchema);
 
     console.log(validatedFile)
     const imageUrl = await uploadImage(validatedFile.image);
@@ -181,12 +182,60 @@ export const createdPropertyAction = async (prevState: any,formData: FormData): 
   try {
     const user = await getCurrentUser();
     const fields = Object.fromEntries(formData);
+    const file = formData.get('image') as File;
+
+
+    console.log(fields)
+
     const validatedFields = validateWithZodSchema(fields, propertySchema);
+    const validatedFile = validateWithZodSchema({ image: file }, imageSchema);
+
+    // if(!validatedFields || !validatedFile) throw new Error("Invalid property data");
+
+    const fullImageUrl = await uploadImage(validatedFile.image);
+    console.log('image url from supabase:', fullImageUrl);
+
+    await db.property.create({
+      data: {
+        ...validatedFields,
+        profileId: user.id,
+        image: fullImageUrl,}
+    })
 
     return {message: 'Property created successfully'};
   } catch (error) {
+    console.log('an Error accured while creating property:', error);
     return errorLogger(error);
     
   }
+
+return redirect("/");
 }
+
+export const fetchProperties = async ({
+  search = '',
+  category,
+}: {
+  search?: string;
+  category?: string;
+}) => {
+  const properties = await db.property.findMany({
+    where: {
+      category,
+      OR: [
+        { name: { contains: search, mode: 'insensitive' } },
+        { tagline: { contains: search, mode: 'insensitive' } },
+      ],
+    },
+    select: {
+      id: true,
+      name: true,
+      tagline: true,
+      country: true,
+      image: true,
+      price: true,
+    },
+  });
+  return properties;
+};
 

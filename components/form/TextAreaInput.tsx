@@ -20,7 +20,7 @@ defaultValue?: string;
       <Textarea
         name={name}
         id={name}
-        defaultValue={defaultValue ?? tempDefaultDescription}
+        defaultValue={defaultValue.length > 0 ? defaultValue : tempDefaultDescription}
         className="mt-1 w-full p-2 border rounded"
         required
         rows={5}
