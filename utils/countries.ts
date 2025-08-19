@@ -10,7 +10,7 @@ type Country = {
         lng: number;
         };
 };
-export const getCountries : () => Country[] = ()  => {
+export const  getCountries : () => Country[] = ()  => {
   return countries.map((country) => ({
     name: country.name.common,
     code: country.cca2,
@@ -23,5 +23,5 @@ export const getCountries : () => Country[] = ()  => {
 };
 
 export const getCountryByCode = (code: string) => {
-  return countries.find((country) => country.cca2 === code);
+  return getCountries().find((country) => country.code === code);
 }
