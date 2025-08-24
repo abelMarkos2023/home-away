@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 
 import { LuRefreshCcw as ReloadIcon } from 'react-icons/lu';
 import React from 'react'
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 /**
  * SubmitButton component that handles form submission.
@@ -17,6 +18,17 @@ type SubmitButtonProps = {
   classNames?: string;
   size?: buttonSizes;
 };
+
+export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
+     const {pending} = useFormStatus()
+
+     return <Button className='p-2 cursor-pointer' size = 'icon' variant='outline'>
+      {
+        pending ? <ReloadIcon className="animate-spin" /> : isFavorite ? <FaHeart /> : <FaRegHeart />
+      }
+     </Button>
+    
+    }
 
 const SubmitButton = ({ text, classNames,size = 'default' } : SubmitButtonProps) => {
 

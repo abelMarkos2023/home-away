@@ -4,11 +4,13 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import React from 'react'
 
-const HomePage = ({searchParams}:{searchParams:{category?:string,search?:string}}) => {
+const HomePage = async ({searchParams}:{searchParams:Promise<{category?:string,search?:string}>}) => {
+
+  const params = await searchParams
   return (
     <div>
-      <CategoriesList category={searchParams?.category} search = {searchParams?.search}/>
-      <PropertiesContainer category={searchParams?.category} search = {searchParams?.search} />
+      <CategoriesList category={params?.category} search = {params?.search}/>
+      <PropertiesContainer category={params?.category} search = {params?.search} />
      
       </div>
   )

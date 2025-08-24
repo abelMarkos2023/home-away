@@ -1,12 +1,19 @@
 import React from 'react'
 import { FaHeart } from 'react-icons/fa';
 import { Button } from '../ui/button';
-const FavoriteToggleButton = ({propertyId}:{propertyId:string}) => {
+import { auth } from '@clerk/nextjs/server';
+import { CardSignInButton } from '../navbar/SignoutButton';
+import { fetchFavoritId } from '@/utils/actions';
+import FavoriteToggleForm from './FavoriteToggleForm';
+const FavoriteToggleButton = async ({propertyId}:{propertyId:string}) => {
+
+  const {userId} = await auth();
+
+  if(!userId) return <CardSignInButton />
+
+  const favoriteId = await fetchFavoritId({propertyId})
   return (
-    <Button variant='outline' size = "icon" className='p-2 cursor-pointer'>
-      <FaHeart className='w-4 h-4' />
-      
-    </Button>
+   <FavoriteToggleForm favoriteId={favoriteId ?? null} propertyId={propertyId} />
   )
 }
 

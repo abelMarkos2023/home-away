@@ -1,8 +1,10 @@
 'use client';
 
-import { SignOutButton } from '@clerk/nextjs';
+import { SignInButton, SignOutButton } from '@clerk/nextjs';
 import React from 'react'
 import { toast } from 'sonner';
+import { Button } from '../ui/button';
+import { FaRegHeart } from 'react-icons/fa';
 
 
 
@@ -24,4 +26,12 @@ const handleLogout = () => {
   )
 }
 
+export const CardSignInButton = () => {
+
+  return <SignInButton mode = 'modal' >
+          <Button asChild variant='outline' size='icon' className='p-2 cursor-pointer'>
+            <FaRegHeart />
+          </Button>
+  </SignInButton>
+}
 export default SignoutButton
