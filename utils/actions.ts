@@ -203,13 +203,16 @@ export const createdPropertyAction = async (prevState: any,formData: FormData): 
     })
 
     return {message: 'Property created successfully'};
+  
   } catch (error) {
     console.log('an Error accured while creating property:', error);
     return errorLogger(error);
     
+  }finally{
+    redirect('/');
   }
 
-return redirect("/");
+ 
 }
 
 export const fetchProperties = async ({
@@ -324,6 +327,24 @@ export const fetchFavorites = async() => {
 
     return favorites.map((favorite) => favorite.property);
 
+  } catch (error) {
+    errorLogger(error);
+  }
+}
+
+export const fetchPropertyById = async({propertyId}:{propertyId:string}) => {
+
+  try {
+    const property = await db.property.findUnique({
+      where: {
+        id: propertyId
+      },
+      include:{
+        profile: true
+      }
+    });
+
+    return property;
   } catch (error) {
     errorLogger(error);
   }

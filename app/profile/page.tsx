@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import FormContainer from "@/components/form/FormContainer";
 import FormInput from "@/components/form/FormInput";
 import ImageInputContainer from "@/components/form/ImageInputContainer";

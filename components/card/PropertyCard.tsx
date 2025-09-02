@@ -13,7 +13,7 @@ const PropertyCard = ({property}:{property:PropertyCardProps}) => {
     const {name, price, image,id:propertyId,country,tagline} = property;
   return (
     <article className="group relative shadow-lg">
-        <Link href={`/property/${propertyId}`}
+        <Link href={`/properties/${propertyId}`}
           className="block w-full h-full">
             <div className='relative h-[300px] mb-3 overflow-hidden rounded-lg'>
               <Image sizes='(max-width:768px) 100vw,50vw' src={image} fill alt={name} className='h-full rounded-lg object-cover group-hover:scale-125 transition-transform duration-500' />

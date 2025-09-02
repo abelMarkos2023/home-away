@@ -32,9 +32,11 @@ const NavSearch = () => {
     if (!searchParams.get('search')) {
       setSearchTerm('');
     }
-  }, [searchParams.get('search')]);
+  }, [searchParams]);
   return (
-    <Input type='text' className='max-w-xl rounded-xl dark:bg-muted' placeholder='find a property...' value={searchTerm} onChange={handleChange} />
+
+      <Input type='text' className='max-w-xl rounded-xl dark:bg-muted' placeholder='find a property...' value={searchTerm} onChange={handleChange} />
+
   )
 }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import Logo from './Logo'
 import NavSearch from './NavSearch'
 import DarkMode from './DarkMode'
@@ -10,7 +10,9 @@ const Navbar = () => {
     <nav className="border-b p-4 shadow-sm ">
         <div className="container flex flex-col flex-wrap px-2 sm:flex-row sm:justify-between sm:items-center">
             <Logo />
+            <Suspense fallback={<div>Loading...</div>}>
             <NavSearch />
+            </Suspense>
             <div className="flex items-center space-x-4">
             <DarkMode />
             <ListDropdown/>

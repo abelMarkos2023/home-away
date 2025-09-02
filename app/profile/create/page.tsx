@@ -1,10 +1,13 @@
+// export const dynamic = 'force-dynamic';
+
+
 import FormContainer from '@/components/form/FormContainer'
 import FormInput from '@/components/form/FormInput'
 import SubmitButton from '@/components/form/SubmitButton'
 import { createProfile } from '@/utils/actions'
 import { currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const CreateProfile = async() => {
 
@@ -13,7 +16,7 @@ const CreateProfile = async() => {
   if(user?.privateMetadata?.hasProfile) redirect('/profile');
 
   return (
-    <div>
+    <Suspense>
         <h2 className="text-2xl capitalize font-semibold m-6">New User</h2>
 
         <div className="rounded-md shadow-md">
@@ -26,7 +29,7 @@ const CreateProfile = async() => {
                 <SubmitButton text='Create Profile' classNames='mt-4 w-full' />
             </FormContainer>
         </div>
-    </div>
+    </Suspense>
   )
 }
 

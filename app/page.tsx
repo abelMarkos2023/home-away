@@ -1,18 +1,17 @@
 import CategoriesList from '@/components/home/CategoriesList'
 import PropertiesContainer from '@/components/home/PropertiesContainer'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import React from 'react'
+
+import React, { Suspense } from 'react'
 
 const HomePage = async ({searchParams}:{searchParams:Promise<{category?:string,search?:string}>}) => {
 
-  const params = await searchParams
+  const params = await searchParams;
   return (
-    <div>
+    <Suspense fallback={<div>Loading...</div>}>
       <CategoriesList category={params?.category} search = {params?.search}/>
       <PropertiesContainer category={params?.category} search = {params?.search} />
      
-      </div>
+      </Suspense>
   )
 }
 
