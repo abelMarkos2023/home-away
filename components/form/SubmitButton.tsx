@@ -2,9 +2,10 @@
 import { useFormStatus } from 'react-dom';
 import { Button } from '@/components/ui/button';
 
-import { LuRefreshCcw as ReloadIcon } from 'react-icons/lu';
+import { LuTrash2, LuRefreshCcw as ReloadIcon } from 'react-icons/lu';
 import React from 'react'
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { LucidePenSquare } from 'lucide-react';
 
 /**
  * SubmitButton component that handles form submission.
@@ -33,6 +34,7 @@ export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
 const SubmitButton = ({ text, classNames,size = 'default' } : SubmitButtonProps) => {
 
     const {pending} = useFormStatus()
+    
   return (
     <Button type='submit' size = {size} disabled={pending} className={`capitalize ${classNames} cursor-pointer`}>
         {
@@ -41,6 +43,31 @@ const SubmitButton = ({ text, classNames,size = 'default' } : SubmitButtonProps)
         Please wait...
         </> ): text
         }
+    </Button>
+  )
+}
+
+
+type actionsType = 'edit' | 'delete'
+export const IconButton = ({ actionType }: { actionType: actionsType }) => {
+
+  const {pending} = useFormStatus()
+
+  const renderIcon = () => {
+    switch(actionType) {
+      case 'edit':
+        return <LucidePenSquare />
+      case 'delete':
+        return <LuTrash2 />
+      default:
+        return null
+    }
+  }
+  return (
+    <Button className='p-2 cursor-pointer' size = 'icon' variant='link'>
+      {
+        pending ? <ReloadIcon className="animate-spin" /> : renderIcon()
+      }
     </Button>
   )
 }

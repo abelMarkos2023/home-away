@@ -2,7 +2,7 @@
 import db from "./db";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { imageSchema, profileSchema,  propertySchema,  validateWithZodSchema } from "./schemas";
+import { createReviewSchema, imageSchema, profileSchema,  propertySchema,  validateWithZodSchema } from "./schemas";
 import { revalidatePath } from "next/cache";
 import { ZodError } from "zod";
 import z from 'zod'
@@ -348,4 +348,144 @@ export const fetchPropertyById = async({propertyId}:{propertyId:string}) => {
   } catch (error) {
     errorLogger(error);
   }
+}
+
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const createReviewAction = async (prevState:any,formData: FormData) => {
+
+  const user = await currentUser();
+
+  try {
+    const rowData = Object.fromEntries(formData);
+    const validatedData = validateWithZodSchema(rowData, createReviewSchema);
+
+   if(user){
+     await db.review.create({
+      data:{
+        ...validatedData,
+        profileId: user.id
+      }
+    })
+
+    revalidatePath(`/property/${validatedData.propertyId}`);
+    return { message: 'review created Successfully' };
+   }else{
+    throw new Error("User not authenticated");
+   }
+  } catch (error) {
+    return { message: 'review created unSuccessfully ' + error };
+  }
+  
+};
+
+export const fetchPropertyReviews = async (propertyId:string) => {
+  const reviews = await db.review.findMany({
+    where:{
+      propertyId
+    },
+    select:{
+      id: true,
+      rating:true,
+      comment: true,
+      profile:{
+        select:{
+          firstName: true,
+          profileImage: true
+        }
+      }
+    },
+    orderBy:{
+      'createdAt': 'desc'
+    }
+  });
+
+  return reviews
+};
+
+export const fetchPropertyReviewsByUser = async () => {
+
+  const user = await getCurrentUser();
+
+  if(!user){
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    const reviews = await db.review.findMany({
+      where: {
+        profileId: user.id
+      },
+      select: {
+        id: true,
+        rating: true,
+        comment: true,
+        property: {
+          select: {
+            id: true,
+            name: true,
+            tagline: true,
+            price: true,
+            country: true,
+            image: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+    }});
+    return reviews
+  } catch (error) {
+    
+  }
+ 
+  
+};
+
+export const deleteReviewAction = async (prevState : {reviewId: string}) => {
+
+   const user = await getCurrentUser();
+
+  if(!user){
+    throw new Error("User not authenticated");
+  }
+
+  await db.review.delete({
+    where: {
+      id: prevState.reviewId
+    }
+  });
+    revalidatePath('/reviews');
+
+  return { message: 'delete  reviews' };
+  
+};
+
+export const fetchPropertyReview = async(propertyId: string) => {
+  
+  const query = await db.review.groupBy({
+    by:['propertyId'],
+    _avg: {
+      rating: true
+    },
+    _count: {
+      rating: true
+    },
+    where: {
+      propertyId
+    }
+  })
+
+  return {rating: query[0]?._avg.rating ?? 0, count: query[0]?._count.rating ?? 0}
+}
+
+export const fetchUserPropertyReview = async(propertyId: string, userId: string) => {
+ 
+  const query = await db.review.findFirst({
+    where: {
+      propertyId,
+      profileId: userId
+    }
+  })
+
+  return query
 }

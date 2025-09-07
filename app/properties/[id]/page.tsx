@@ -11,8 +11,11 @@ import PropertyDetails from '@/components/properties/PropertyDetails';
 import PropertyImage from '@/components/properties/PropertyImage';
 import ShareButton from '@/components/properties/ShareButton';
 import UserInfo from '@/components/properties/UserInfo';
+import PropertyReviews from '@/components/reviews/PropertyReviews';
+import Submitreview from '@/components/reviews/Submitreview';
 
-import { fetchPropertyById } from '@/utils/actions';
+import { fetchPropertyById, fetchUserPropertyReview } from '@/utils/actions';
+import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import React from 'react'
 
@@ -20,12 +23,20 @@ import React from 'react'
 
 const page = async ({params}:{params:Promise<{id:string}>}) => {
 
+  const {userId} = await auth();
+
+
     const {id} = await params;
     const property = await fetchPropertyById({propertyId: id});
-
     if(!property){
         return redirect('/')
     }
+
+     const isNotOwner = property.profile.clerkId !== userId
+
+     const showReview = userId && isNotOwner && (await fetchUserPropertyReview(property.id,userId))
+
+    
     const {beds,bedrooms,baths,guests} = property;
 
     const detail = {beds,bedrooms,baths,guests};
@@ -57,6 +68,9 @@ const page = async ({params}:{params:Promise<{id:string}>}) => {
           <Descriptionn description={property.description} />
           <Amenities amenities={property.amenities} />
           <DynamicMap countryCode={property.country} />
+           {showReview && <Submitreview propertyId={id} />}
+          <PropertyReviews propertyId={id} />
+         
         </div>
         <div className="lg:col-span-4">
           <DateCalender />

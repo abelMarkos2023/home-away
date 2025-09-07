@@ -86,3 +86,9 @@ export const propertySchema = zod.object({
   }),
   amenities: zod.string(),
 });
+
+export const createReviewSchema = zod.object({
+  rating: zod.coerce.number().min(1).max(5),
+  comment: zod.string(),
+  propertyId: zod.string(),
+});
