@@ -34,7 +34,7 @@ const page = async ({params}:{params:Promise<{id:string}>}) => {
 
      const isNotOwner = property.profile.clerkId !== userId
 
-     const showReview = userId && isNotOwner && (await fetchUserPropertyReview(property.id,userId))
+     const showReview = userId && isNotOwner && (!await fetchUserPropertyReview(property.id,userId))
 
     
     const {beds,bedrooms,baths,guests} = property;
