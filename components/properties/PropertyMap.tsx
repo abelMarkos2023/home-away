@@ -30,7 +30,7 @@ function PropertyMap({ countryCode }: { countryCode: string }) {
             scrollWheelZoom={false}
             center={fixedLocation || defaultLocation}
             zoom={7}
-            className='h-[40vh rounded-lg relative z-0'
+            className='h-[40vh] rounded-lg relative z-0'
             >
                  <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
