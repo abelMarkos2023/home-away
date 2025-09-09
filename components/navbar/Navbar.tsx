@@ -3,7 +3,6 @@ import Logo from './Logo'
 import NavSearch from './NavSearch'
 import DarkMode from './DarkMode'
 import ListDropdown from './ListDropdown'
-import SignoutButton from './SignoutButton'
 
 const Navbar = () => {
   return (
@@ -16,7 +15,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
             <DarkMode />
             <ListDropdown/>
-            <SignoutButton/>
+           
             </div>
         </div>
     </nav>

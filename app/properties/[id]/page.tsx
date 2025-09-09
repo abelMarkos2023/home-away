@@ -1,10 +1,8 @@
-
-
+import DynamicBookingWrapper from '@/components/booking/DynamicBookingWrapper';
 import FavoriteToggleButton from '@/components/card/FavoriteToggleButton';
 import PropertyRating from '@/components/card/PropertyRating';
 import Amenities from '@/components/properties/Amenities';
 import BreadCrumbs from '@/components/properties/BreadCrumbs';
-import DateCalender from '@/components/properties/DateCalender';
 import Descriptionn from '@/components/properties/Descriptionn';
 import DynamicMap from '@/components/properties/DynamicMap';
 import PropertyDetails from '@/components/properties/PropertyDetails';
@@ -18,6 +16,7 @@ import { fetchPropertyById, fetchUserPropertyReview } from '@/utils/actions';
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import React from 'react'
+
 
 
 
@@ -73,7 +72,7 @@ const page = async ({params}:{params:Promise<{id:string}>}) => {
          
         </div>
         <div className="lg:col-span-4">
-          <DateCalender />
+          <DynamicBookingWrapper propertyId={property.id} price={property.price} bookings={property.bookings} />
         </div>
       </div>
     </section>

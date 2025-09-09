@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { ZodError } from "zod";
 import z from 'zod'
 import { uploadImage } from "./supabase";
+import { calculateTotal } from "./calculateTotal";
 
 export async function getCurrentUser() {
   const user = await currentUser();
@@ -340,7 +341,14 @@ export const fetchPropertyById = async({propertyId}:{propertyId:string}) => {
         id: propertyId
       },
       include:{
-        profile: true
+        profile: true,
+        bookings:{
+          select:{
+            checkIn: true,
+            checkOut: true
+          }
+        },
+        
       }
     });
 
@@ -488,4 +496,97 @@ export const fetchUserPropertyReview = async(propertyId: string, userId: string)
   })
 
   return query
+}
+
+export const createBookingAction = async(prevState:{propertyId:string,checkIn:Date,checkOut:Date}) => {
+
+  const {propertyId, checkIn, checkOut} = prevState;
+
+  try {
+    const user = await getCurrentUser();
+    const property = await db.property.findUnique({
+      where: {
+        id: propertyId
+      }
+    });
+    if(!property){
+      throw new Error("Property not found");
+    }
+    const {orderTotal, totalNights} = calculateTotal({
+      checkIn,checkOut,price:property.price
+    });
+
+    const booking = await db.booking.create({
+      data:{
+        checkIn,
+        checkOut,
+         orderTotal,
+         profileId: user.id,
+         totalNights,
+         propertyId:property.id
+      }
+    })
+  } catch (error) {
+    errorLogger(error);
+  }
+redirect('/bookings')
+}
+
+export const fetchBookings = async() => {
+
+  const user = await getCurrentUser();
+
+  if(!user){
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    const bookings = await db.booking.findMany({
+      where:{
+        profileId:user.id
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      include:{
+        property:{
+          select: {
+            id: true,
+            name: true,
+           
+            price: true,
+            country: true,
+            image: true,
+          },
+        }
+      }
+     
+    });
+
+    return bookings
+  } catch (error) {
+     errorLogger(error);
+  }
+}
+
+export const deleteBookingAction = async(prevState:{bookingId:string}) => {
+  
+  const {bookingId} = prevState;
+
+  try {
+    const user = await getCurrentUser();
+    if(!user){
+      throw new Error("User not authenticated");
+    }
+
+     await db.booking.delete({
+      where: {
+        id: bookingId
+      }
+    });
+    revalidatePath('/bookings')
+    return { message: 'Booking deleted successfully' };
+  } catch (error) {
+    return errorLogger(error);
+  }
 }

@@ -18,7 +18,7 @@ function PropertyMap({ countryCode }: { countryCode: string }) {
   const location = getCountryByCode(countryCode)?.location ?? {lat: 0, lng: 0};
 
     const fixedLocation = [location?.lat, location?.lng] as [number, number]
-  console.log(countryCode, location);
+  
 
   return(
     <div className="mt-4">
