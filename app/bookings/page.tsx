@@ -31,6 +31,7 @@ const BookingsPage = async() => {
             <TableHead>Price</TableHead>
             <TableHead>TotalNights</TableHead>
             <TableHead>Total</TableHead>
+            <TableHead>Payment Status</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
 
@@ -57,6 +58,7 @@ const BookingsPage = async() => {
                 <TableCell className='font-medium'>{formatCurrency(price)}</TableCell>
                 <TableCell className='font-medium'>{totalNights} {totalNights > 1 ? 'nights' : 'night'}</TableCell>
                 <TableCell className='font-medium'>{formatCurrency(orderTotal)}</TableCell>
+                <TableCell className='font-medium'>{booking.paymentStatus ? 'paid' : 'unpaid'}</TableCell>
                 <TableCell className='font-medium text-blue-600 cursor-pointer hover:underline'>
                   <DeleteBoking bookingId={id} />
                 </TableCell>

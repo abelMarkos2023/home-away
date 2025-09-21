@@ -11,6 +11,7 @@ import { LuAlignLeft } from "react-icons/lu";
 import UserIcon from "./UserIcon";
 import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import SignoutButton from "./SignoutButton";
+import { auth } from "@clerk/nextjs/server";
 
 type NavLink = {
   href: string;
@@ -21,13 +22,19 @@ export const links: NavLink[] = [
   { href: '/', label: 'home' },
   { href: '/favorites ', label: 'favorites' },
   { href: '/bookings ', label: 'bookings' },
+  { href: '/reservations ', label: 'Reservations' },
+  { href: '/admin ', label: 'Admin' },
   { href: '/reviews ', label: 'reviews' },
   { href: '/rentals/create ', label: 'create rental' },
   { href: '/rentals', label: 'my rentals' },
   { href: '/profile ', label: 'profile' },
 ];
 
-export default function ListDropdown() {
+export default async function ListDropdown() {
+
+  const {userId} = await auth()
+
+  const isAdmin = userId === process.env.ADMIN_ID;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -39,14 +46,18 @@ export default function ListDropdown() {
       <DropdownMenuContent className="w-56" align="start">
      <SignedIn>
         {
-          links.map((link) => (
-            <DropdownMenuItem key={link.href}>
+          links.map((link) => {
+            if(link.label === 'Admin' && !isAdmin) return null;
+            
+            return (
+              <DropdownMenuItem key={link.href}>
              
               <Link href={link.href} className="w-full">
                 {link.label}  
               </Link>
             </DropdownMenuItem>
-          ))
+            )
+          })
         }
 
         <SignoutButton />

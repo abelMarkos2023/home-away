@@ -20,7 +20,9 @@ const Loading = () => {
             <TableHead>Check Out</TableHead>
             <TableHead>Price</TableHead>
             <TableHead>TotalNights</TableHead>
+
             <TableHead>Total</TableHead>
+            <TableHead>Payment Status</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
 
