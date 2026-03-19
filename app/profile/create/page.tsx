@@ -11,9 +11,10 @@ import React, { Suspense } from 'react'
 
 const CreateProfile = async() => {
 
-  const user = await currentUser();
+  const user = await currentUser()
 
-  if(user?.privateMetadata?.hasProfile) redirect('/profile');
+//   if(user?.privateMetadata?.hasProfile) redirect('/profile');
+
 
   return (
     <Suspense>

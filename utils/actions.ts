@@ -99,7 +99,8 @@ export const fetchProfileImage = async () => {
   const user = await currentUser();
   if (!user) return null;
 
-  const profileImage = await db.profile.findUnique({
+ try {
+   const profileImage = await db.profile.findUnique({
     where: {
       clerkId: user.id,
     },
@@ -109,6 +110,9 @@ export const fetchProfileImage = async () => {
   });
 
   return profileImage?.profileImage;
+ } catch (error) {
+  console.log(error)
+ }
 };
 
 export const fetchProfile = async () => {
@@ -122,7 +126,7 @@ export const fetchProfile = async () => {
     });
 
     if (!profile) {
-      redirect("/profile/create");
+      //redirect("/profile/create");
     }
 
     return profile;
@@ -214,7 +218,7 @@ export const createdPropertyAction = async (prevState: any,formData: FormData): 
       data: {
         ...validatedFields,
         profileId: user.id,
-        image: fullImageUrl,}
+        image: fullImageUrl ,}
     })
 
     return {message: 'Property created successfully'};
@@ -237,7 +241,8 @@ export const fetchProperties = async ({
   search?: string;
   category?: string;
 }) => {
-  const properties = await db.property.findMany({
+  try {
+    const properties = await db.property.findMany({
     where: {
       category,
       OR: [
@@ -255,6 +260,9 @@ export const fetchProperties = async ({
     },
   });
   return properties;
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export async function fetchFavoritId({propertyId}:{propertyId:string}){

@@ -6,9 +6,9 @@ import PropertiesList from './PropertiesList';
 
 const PropertiesContainer = async({search,category}:{search?:string,category?:string}) => {
   
-  const properties : PropertyCardProps[] = await fetchProperties({search,category});
+  const properties : PropertyCardProps[] = await fetchProperties({search,category}) || [];
 
-  if(properties.length === 0) {
+  if(!properties || properties.length === 0) {
     return <EmptyList  
       heading="No Properties Found"
       message="Try changing your search or filter options, or go back to the homepage."
