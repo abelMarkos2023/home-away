@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { fetchReservations } from '@/utils/actions';
 import EmptyList from '@/components/home/EmptyList';
 import CountryNameAndFlag from '@/components/card/CountryNameAndFlag';

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import CountryNameAndFlag from '@/components/card/CountryNameAndFlag';
 import FormContainer from '@/components/form/FormContainer';
 import { IconButton } from '@/components/form/SubmitButton';
