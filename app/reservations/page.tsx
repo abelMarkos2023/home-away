@@ -1,5 +1,4 @@
 import { fetchReservations } from '@/utils/actions';
-import Link from 'next/link';
 import EmptyList from '@/components/home/EmptyList';
 import CountryNameAndFlag from '@/components/card/CountryNameAndFlag';
 

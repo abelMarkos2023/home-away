@@ -4,7 +4,7 @@
 import FormContainer from '@/components/form/FormContainer'
 import FormInput from '@/components/form/FormInput'
 import SubmitButton from '@/components/form/SubmitButton'
-import { createProfile } from '@/utils/actions'
+import { createProfile, fetchProfile } from '@/utils/actions'
 import { currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import React, { Suspense } from 'react'
@@ -13,7 +13,10 @@ const CreateProfile = async() => {
 
   const user = await currentUser()
 
-//   if(user?.privateMetadata?.hasProfile) redirect('/profile');
+  if(user?.privateMetadata?.hasProfile) {
+     const profile = await fetchProfile();
+     if(profile) redirect('/profile');
+   }
 
 
   return (

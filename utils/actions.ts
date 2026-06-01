@@ -17,6 +17,22 @@ export async function getCurrentUser() {
   }
 
   if (!user.privateMetadata?.hasProfile) {
+    const profile = await db.profile.findUnique({
+      where: {
+        clerkId: user.id,
+      },
+    });
+
+    if (profile) {
+      const client = await clerkClient();
+      await client.users.updateUserMetadata(user.id, {
+        privateMetadata: {
+          hasProfile: true,
+        },
+      });
+      return user;
+    }
+
     return redirect("/profile/create");
   }
 
@@ -78,7 +94,7 @@ export async function createProfile(prevState: any, formData: FormData) {
 
     const client = await clerkClient();
 
-    client.users.updateUserMetadata(user.id, {
+    await client.users.updateUserMetadata(user.id, {
       privateMetadata: {
         hasProfile: true,
       },
@@ -116,18 +132,15 @@ export const fetchProfileImage = async () => {
 };
 
 export const fetchProfile = async () => {
-  try {
-    const user = await getCurrentUser();
+  const user = await currentUser();
+  if (!user) return null;
 
+  try {
     const profile = await db.profile.findUnique({
       where: {
         clerkId: user.id,
       },
     });
-
-    if (!profile) {
-      //redirect("/profile/create");
-    }
 
     return profile;
   } catch (error) {

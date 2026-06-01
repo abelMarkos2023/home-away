@@ -49,16 +49,16 @@ export const uploadImage = async (file: File) => {
       throw new Error(`Error uploading image: ${error.message}`);
     }
 
-    const { data: urlData, error: urlError } = supabase.storage
+    const { data: urlData } = await supabase.storage
       .from(bucket)
       .getPublicUrl(newname);
 
-    if (urlError) {
-      throw new Error(`Error getting public URL: ${urlError.message}`);
+    if (!urlData) {
+      throw new Error(`Error getting public URL`);
     }
 
     return urlData.publicUrl;
-  } catch (err: any) {
+  } catch (err) {
     console.error(err);
     throw err;
   }

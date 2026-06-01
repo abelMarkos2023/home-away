@@ -36,8 +36,10 @@ const BookingCalender = () => {
       return false;
     });
 
+    console.log()
+
     useProperty.setState({range})
-  }, [range]);
+  }, [range,disabledDates]);
   return (
     <Calendar  
       mode='range'

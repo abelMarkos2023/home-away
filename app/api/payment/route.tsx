@@ -1,4 +1,4 @@
-import { type NextResponse, type NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 
 import  db  from "@/utils/db";
 
