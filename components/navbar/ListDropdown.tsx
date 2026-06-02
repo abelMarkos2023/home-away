@@ -9,7 +9,7 @@ import {
 import Link from "next/link";
 import { LuAlignLeft } from "react-icons/lu";
 import UserIcon from "./UserIcon";
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import SignoutButton from "./SignoutButton";
 import { auth } from "@clerk/nextjs/server";
 
@@ -20,14 +20,14 @@ type NavLink = {
 
 export const links: NavLink[] = [
   { href: '/', label: 'home' },
-  { href: '/favorites ', label: 'favorites' },
-  { href: '/bookings ', label: 'bookings' },
-  { href: '/reservations ', label: 'Reservations' },
-  { href: '/admin ', label: 'Admin' },
-  { href: '/reviews ', label: 'reviews' },
-  { href: '/rentals/create ', label: 'create rental' },
+  { href: '/favorites', label: 'favorites' },
+  { href: '/bookings', label: 'bookings' },
+  { href: '/reservations', label: 'Reservations' },
+  { href: '/admin', label: 'Admin' },
+  { href: '/reviews', label: 'reviews' },
+  { href: '/rentals/create', label: 'create rental' },
   { href: '/rentals', label: 'my rentals' },
-  { href: '/profile ', label: 'profile' },
+  { href: '/profile', label: 'profile' },
 ];
 
 export default async function ListDropdown() {
@@ -44,7 +44,8 @@ export default async function ListDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start">
-     <SignedIn>
+     {userId ? (
+       <>
         {
           links.map((link) => {
             if(link.label === 'Admin' && !isAdmin) return null;
@@ -61,8 +62,9 @@ export default async function ListDropdown() {
         }
 
         <SignoutButton />
-        </SignedIn>
-        <SignedOut>
+       </>
+     ) : (
+       <>
           <DropdownMenuItem>
             <SignInButton mode="modal">
               <button className="w-full text-left px-4 py-2 hover:bg-secondary rounded-md transition-colors flex items-center gap-2">
@@ -77,7 +79,8 @@ export default async function ListDropdown() {
               </button>
             </SignUpButton>
           </DropdownMenuItem>
-        </SignedOut>
+       </>
+     )}
      
       </DropdownMenuContent>
     </DropdownMenu>
