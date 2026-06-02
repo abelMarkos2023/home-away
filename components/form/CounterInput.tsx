@@ -25,11 +25,11 @@ const CounterInput = ({text,defaultValue}:{text:string,defaultValue?:string}) =>
                     <p className="text-xs text-muted-foreground capitalize">specify the number of {text}</p>
                 </div>
                 <div className="flex items-center gap-4">
-                    <Button variant="outline" size="icon" onClick={decrement} disabled={count <= 0}>
+                    <Button type='button' variant="outline" size="icon" onClick={decrement} disabled={count <= 0}>
                         <LuMinus className="w-4 h-4 text-primary" />
                     </Button>
                     <span className="text-xl font-semibold">{count}</span>
-                    <Button variant="outline" size="icon" onClick={increment}>
+                    <Button type='button' variant="outline" size="icon" onClick={increment}>
                         <LuPlus className='w-4 h-4 text-primary' />
                     </Button>
                 </div>
